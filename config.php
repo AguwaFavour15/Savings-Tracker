@@ -1,20 +1,16 @@
 <?php
-session_start();
+// Read database config from environment variables or fall back to defaults
+$host     = getenv('DB_HOST') ?: 'localhost';
+$username = getenv('DB_USERNAME') ?: 'root';
+$password = getenv('DB_PASSWORD') ?: ''; // blank password
+$database = getenv('DB_DATABASE') ?: 'acctrack';
+$port     = getenv('DB_PORT') ?: 3306;
 
-$host = 'localhost';
-$db = 'acctrack';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
+// Create connection
+$conn = new mysqli($host, $username, $password, $database, $port);
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-];
-
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (PDOException $e) {
-    die("Database error: " . $e->getMessage());
+// Check connection
+if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
 }
+?>
