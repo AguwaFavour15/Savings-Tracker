@@ -1,7 +1,10 @@
 FROM php:8.1-apache
 
-# Copy app files to Apache web root
-COPY public/ /var/www/html/
+# Clear existing Apache directory
+RUN rm -rf /var/www/html/*
 
-# Enable Apache mod_rewrite if needed
+# Copy everything from the repo root
+COPY . /var/www/html/
+
+# Enable Apache rewrite module (optional, good for future Laravel or .htaccess use)
 RUN a2enmod rewrite
